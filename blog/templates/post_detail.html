@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block head_title %}Blog - {{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row">
+    <div class="col-lg-10 offset-lg-1">
+      <div class="card shadow">
+        <div class="card-body">
+          <article>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h1 class="mb-0">{{ post.title }}</h1>
+              <div>
+                {% if perms.blog.change_blogpost and user == post.created_by  %}
+                  <a href="{% url 'blog:post_edit' post.id %}" class="btn btn-secondary">Edit Post</a>
+                {% endif %}
+                {% if perms.blog.delete_blogpost and user == post.created_by %}
+                <a href="{% url 'blog:post_delete' post.id %}" class="btn btn-primary">Delete Post</a>
+                {% endif %}
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <div>
+                <p class="mb-0">{{ post.date_added|date:"F j, Y" }} by {{ post.created_by.get_full_name }}</p>
+              </div>
+            </div>
+            <div class="post-content">
+              {{ post.content|safe }}
+            </div>
+            <div class="mt-4">
+              <p class="text-muted mb-0">Last modified {{ post.last_modified|date:"F j, Y" }} by {{ post.last_modified_by.get_full_name }}</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

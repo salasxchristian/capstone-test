@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1>Edit Kiosk Link</h1>
+            <p>Kiosk links are unique, generated links allow kiosk devices to directly access the guest check-in page without requiring authentication.</p>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="name" class="form-label"><strong>Name<span class="text-danger">*</span></strong></label>
+                    {{ form.name}}
+                    <div id="nameHelp" class="form-text">Enter a unique name</div>
+                </div>
+                <div class="mb-3">
+                    <label for="location" class="form-label"><strong>Location<span class="text-danger">*</span></strong></label>
+                    {{ form.location}}
+                </div>
+                <button type="submit" class="btn btn-primary">Update</button>
+                <a href="{% url 'vms:settings' %}?tab=kioskLinks" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+    
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container py-4">
+      {% include 'partials/messages_alert.html' %}
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <h2 class="mb-0">Application Settings</h2>
+          <p class="text-muted">
+            Customize the
+            portal's appearance, user permissions, and content settings. Remember to
+            save your changes before exiting this page.
+          </p>
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="{{ form.APP_NAME.id_for_label }}" class="form-label">
+                <strong>App Name</strong>
+              </label>
+              {{ form.APP_NAME }}
+              <div id="{{ form.APP_NAME.id_for_label }}Help" class="form-text">The name of the application that shows in the navbar</div>
+            </div>
+            <div class="mb-3">
+              <label for="{{ form.LANDING_JB_TITLE.id_for_label }}" class="form-label"><strong>Landing Page Jumbotron Title</strong></label>
+              {{ form.LANDING_JB_TITLE }}
+              <div id="{{ form.LANDING_JB_TITLE.id_for_label }}Help" class="form-text">Title for the jumbotron that shows up in the landing page</div>
+            </div>
+            <div class="mb-3">
+              <label for="{{ form.LANDING_JB_CONTENT.id_for_label }}" class="form-label"><strong>Landing Page Jumbotron Content</strong></label>
+              {{ form.LANDING_JB_CONTENT }}
+              <div id="{{ form.LANDING_JB_CONTENT.id_for_label }}Help" class="form-text">Content of the jumbotron that shows up in the landing page</div>
+            </div>
+            <div class="mb-3">
+              <label for="{{ form.LANDING_JB_LINK.id_for_label }}" class="form-label"><strong>Landing Page Jumbotron Link</strong></label>
+              {{ form.LANDING_JB_LINK }}
+              <div id="{{ form.LANDING_JB_LINK.id_for_label }}Help" class="form-text">Link that the button on the jumbotron in the landing page redirects to</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </form>
+          </div>
+        </div>
+    </div>
+{% endblock %}

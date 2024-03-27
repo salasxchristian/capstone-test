@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    {% include 'partials/form_error.html' %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="mb-0">Edit Resource Link</h1> 
+            <p class="text-muted">Resource links are links that point to webpages, tools, resources and more.</p>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="name" class="form-label"><strong>Title</strong><span class="text-danger">*</span></label>
+                    {{ form.title}}
+                </div>
+                <div class="mb-3">
+                    <label for="URL" class="form-label"><strong>URL</strong><span class="text-danger">*</span></label>
+                    {{ form.url}}
+                </div>
+                <div class="mb-3">
+                    <label for="category" class="form-label"><strong>Category<span class="text-danger">*</span></strong></label>
+                    {{ form.category}}
+                    <div id="categoryHelp" class="form-text">A category is required for your link/resource. If no Categories exist, please <a href="{% url 'resources:create_link_category' %}">create one</a> first.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="link-type" class="form-label"><strong>Link Type</strong><span class="text-danger">*</span></label>
+                    {{ form.is_internal}}
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label"><strong>Description (Optional)</strong></label>
+                    {{ form.description}}
+                </div>
+                <button type="submit" class="btn btn-primary">Update</button>
+                <a href="{% url 'resources:links' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>    
+{% endblock %}

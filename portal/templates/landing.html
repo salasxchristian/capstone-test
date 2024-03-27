@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Technology Services Landing Page{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  {% include 'partials/messages_alert.html' %}
+  <div class="py-2 px-4 mb-4 bg-body-tertiary rounded-3">
+    <div class="container-fluid py-5">
+      <!-- Personalized Welcome message within the existing jumbotron -->
+      {% if user.first_name %}
+      <h2 class="fw-bold">Welcome, {{ user.first_name }}.</h2>
+      {% endif %}
+      <!-- Main Heading and Content -->
+      <h1 class="display-4 fw-bold mt-3"><img src="{% static 'images/app_icon.png' %}" alt="" height="80px" class="me-3">{{ config.LANDING_JB_TITLE}}</h1>
+      <p class="col-md-12 fs-4">{{ config.LANDING_JB_CONTENT }}</p>
+      <a href="{{ config.LANDING_JB_LINK }}" class="btn btn-primary btn-lg mt-3">Learn more</a>
+    </div>
+  </div>
+
+  {% if blog_posts and perms.blog.view_blogpost %}
+  <h2 class="text-center mb-4">Recent Posts</h2>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for post in blog_posts %}
+    <div class="col">
+      <div class="card h-100">
+        {% if post.image %}
+        <img src="" class="card-img-top" alt="{{ post.title }}">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ post.title }}</h5>
+          <p class="card-text">{{ post.content|safe|striptags|truncatewords:30 }}</p>
+        </div>
+        <div class="card-footer">
+          <a href="{% url 'blog:post_detail' post.id %}" class="btn btn-primary">Read More</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

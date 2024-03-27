@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <h5 class="card-header bg-primary text-white">Confirm Delete Resource Link</h5>
+                <div class="card-body">
+                    <p class="card-text">Are you sure you want to delete the link named <u>{{ link.title }}</u>?</p>
+                    <p class="card-text text-danger">Warning: This action cannot be reversed.</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Delete</button>
+                        <a href="{% url 'resources:links' %}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+{% endblock %}

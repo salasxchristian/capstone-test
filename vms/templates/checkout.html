@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <h5 class="card-header bg-primary text-white">Check Out Guest</h5>
+                <div class="card-body">
+                    <p class="card-text">Are you sure you check out the guest <u>{{ guest.full_name }}</u>?</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Check Out</button>
+                        <a href="{% url 'vms:checkin_active' %}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+{% endblock %}

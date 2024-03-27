@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4" id="sortable-container">
+    {% include 'partials/messages_alert.html'   %}
+    <div class="row">
+        <div class="col-6">
+            <h1 class="mb-0">Resources</h1>
+            <p class="text-muted">A collection of useful links, resources, tools and more.</p>
+        </div>
+        <div class="col-6 text-end">
+            {% if perms.network_portal.add_link or perms.network_portal.add_linkcategory %}
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-gear"></i> Manage Links
+                </button>
+                <ul class="dropdown-menu">
+                  {% if perms.network_portal.add_link %}
+                  <li><a class="dropdown-item" href="{% url 'resources:create_link' %}"><i class="bi bi-plus"></i> Add Link</a></li>
+                  {% endif %}
+                  {% if perms.network_portal.add_linkcategory %}
+                  <li><a class="dropdown-item" href="{% url 'resources:create_link_category' %}"><i class="bi bi-plus"></i> Add Category</a></li>
+                  {% endif %}
+                  {% if perms.network_portal.add_linkcategory %}
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'resources:categories' %}">Manage Link Categories</a></li>
+                  {% endif %}
+                </ul>
+              </div>
+              {% endif %}
+        </div>
+    </div>
+    {% for category in link_categories %}
+        <div class="list-group mb-2">
+            <h5 class="list-group-item list-group-item-action mb-0 bg-primary d-flex justify-content-between align-items-center">{{ category.name }} {% if perms.network_portal.add_link %} <a href="{% url 'resources:create_link' %}?category={{ category.id }}" class="btn btn-outline-secondary btn-sm text-white"><i class="bi bi-plus-circle me-1"></i>Add Link</a> {% endif %}</h5>
+            {% for link in category.links.all|dictsort:"title" %}
+            <div class="d-flex align-items-center list-group-item list-group-item-action link-list-group-item">
+                <a href="{{ link.url }}" target="_blank" class="flex-grow-1 text-decoration-none link-list-item">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1">{{ link.title }}{% if not link.is_internal %} <i class="bi bi-arrow-up-right-square" title="External link"></i>{% endif %}</h6>
+                        {#<small class="text-muted">{{ link.last_modified|timesince }} ago</small>#}
+                    </div>
+                    <p class="text-muted mb-1">{{ link.description }}</p>
+                </a>
+                {% if perms.network_portal.change_link %}
+                <a href="{% url 'resources:link_edit' link.id %}" class="btn btn-outline-secondary me-2">Edit</a>
+                {% endif %}
+                {% if perms.network_portal.delete_link %}
+                <a href="{% url 'resources:link_delete' link.id %}" class="btn btn-outline-danger">Delete</a>
+                {% endif %}
+            </div>
+            {% empty %}
+            <p class="list-group-item">No links in this category yet.</p>
+            {% endfor %}
+        </div>
+    {% empty %}
+        <p>No categories exist yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

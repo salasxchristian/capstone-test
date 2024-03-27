@@ -1,0 +1,347 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="d-flex">
+        <div class="container py-4">
+            {% include 'partials/messages_alert.html'   %}
+            <h1 class="mb-0">Visitor Management Settings</h1>
+            <p class="text-muted">Manage settings for the Visitor Management System (VMS)</p>
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active"
+                            id="nav-organizations-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-organizations"
+                            type="button"
+                            role="tab"
+                            aria-controls="nav-organizations"
+                            aria-selected="true">
+                        <strong>Organizations</strong>
+                    </button>
+                    <button class="nav-link"
+                            id="nav-kioskLinks-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-kioskLinks"
+                            type="button"
+                            role="tab"
+                            aria-controls="nav-kioskLinks"
+                            aria-selected="false">
+                        <strong>Kiosk Access Links</strong>
+                    </button>
+                    <button class="nav-link"
+                            id="nav-kioskLocations-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-kioskLocations"
+                            type="button"
+                            role="tab"
+                            aria-controls="nav-kioskLocations"
+                            aria-selected="false">
+                        <strong>Kiosk Locations</strong>
+                    </button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active"
+                     id="nav-organizations"
+                     role="tabpanel"
+                     aria-labelledby="nav-organizations-tab"
+                     tabindex="0">
+                    <div class="my-3">
+                        <p>An Organization is a company or business entity that guests can select, allowing you to keep track of their respective affiliations.</p>
+                        <a class="btn btn-primary mb-3" href="{% url 'vms:kiosk_org_create' %}"><i class="bi bi-plus-lg me-1"></i>Add Organization</a>
+                    </div>
+                    <div>
+                        {% if organizations %}
+                            <table class="table table-striped table-hover"
+                                   id="organizationTable">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Notes</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for organization in organizations %}
+                                        <tr>
+                                            <td>{{ organization.name }}</td>
+                                            <td>{{ organization.notes }}</td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-primary btn-sm dropdown-toggle"
+                                                            type="button"
+                                                            id="dropdownMenuButton"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                        <i class="bi bi-three-dots-vertical"></i> Actions
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <li>
+                                                            <a class="dropdown-item"
+                                                               href="{% url 'vms:kiosk_org_edit' organization.id %}"><i class="bi bi-pencil"></i> Edit</a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item"
+                                                               href="{% url 'vms:kiosk_org_delete' organization.id %}"><i class="bi bi-trash"></i> Delete</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div class="mt-3 p-3 border rounded">
+                                <h4>No Organizations Found</h4>
+                                <p>Click the "Add Organization" button to create a new organization.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- Start  -->
+                <div class="tab-pane fade"
+                     id="nav-kioskLinks"
+                     role="tabpanel"
+                     aria-labelledby="nav-kioskLinks-tab"
+                     tabindex="0">
+                    <div class="my-3">
+                        <p>A Kiosk Link is a unique, generated link that allows kiosk devices to directly access the guest check-in page without requiring authentication.</p>
+                        <a class="btn btn-primary" href="{% url 'vms:kiosk_token_create' %}"><i class="bi bi-plus-lg me-1"></i>Add Link</a>
+                    </div>
+                    {% if tokens %}
+                        <table class="table table-striped table-hover" id="kioskTokenTable">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Location</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for token in tokens %}
+                                    <tr>
+                                        <td>{{ token.name }}</td>
+                                        <td>{{ token.location }}</td>
+                                        <td>{{ token.created_at|date:"M j, Y" }}</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button"
+                                                        class="btn btn-primary btn-sm dropdown-toggle"
+                                                        data-bs-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                    <i class="bi bi-three-dots-vertical me-1"></i>Actions
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a class="dropdown-item view-token-btn"
+                                                               href="#"
+                                                               data-bs-toggle="modal"
+                                                               data-bs-target="#tokenModal"
+                                                               data-token-id="{{ token.id }}">
+                                                                <i class="bi bi-link"></i> View Link
+                                                            </a>
+                                                        </li>
+                                                    <li>
+                                                        <a class="dropdown-item"
+                                                           href="{% url 'vms:kiosk_token_edit' token.id %}">
+                                                            <i class="bi bi-pencil"></i> Edit
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item"
+                                                           href="{% url 'vms:kiosk_token_delete' token.id %}">
+                                                            <i class="bi bi-trash"></i> Delete
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <div class="mt-3 p-3 border rounded">
+                            <h4>No Kiosk Access Links Found</h4>
+                            <p>Click the "Create Link" button to create a new kiosk access link.</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <!-- End -->
+                <div class="tab-pane fade"
+                     id="nav-kioskLocations"
+                     role="tabpanel"
+                     aria-labelledby="nav-kioskLocations-tab"
+                     tabindex="0">
+                    <div class="my-3">
+                        <p>A Kiosk Location is a physical location where a Check-In Kiosk is or will be installed. By specifying the details for each kiosk, such as building name, room number, or geographic coordinates, you can efficiently track and organize where guests are checking in.</p>
+                        <a class="btn btn-primary"
+                           href="{% url 'vms:kiosk_location_create' %}"><i class="bi bi-plus-lg me-1"></i>Add Kiosk Location</a>
+                    </div>
+                        {% if locations %}
+                                <table class="table table-striped table-hover" id="kioskLocationsTable">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Notes</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for location in locations %}
+                                            <tr>
+                                                <td>{{ location.name }}</td>
+                                                <td>{{ location.notes }}</td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-primary btn-sm dropdown-toggle"
+                                                                type="button"
+                                                                id="dropdownMenuButton"
+                                                                data-bs-toggle="dropdown"
+                                                                aria-expanded="false"><i class="bi bi-three-dots-vertical"></i> Actions</button>
+                                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                            <li>
+                                                                <a class="dropdown-item" href="{% url 'vms:kiosk_location_edit' location.id %}"><i class="bi bi-pencil"></i> Edit</a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item" href="{% url 'vms:kiosk_location_delete' location.id %}"><i class="bi bi-trash"></i> Delete</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                        {% else %}
+                            <div class="mt-3 p-3 border rounded">
+                                <h4>No Kiosk Locations Found</h4>
+                                <p>Click the "Add Kiosk Location" button to create a new kiosk location.</p>
+                            </div>
+                        {% endif %}
+                </div>
+            </div>
+            <!-- End Nav Tab Group -->
+        </div>
+    </div>
+    <!-- Token Modal -->
+    <div class="modal fade"
+         id="tokenModal"
+         tabindex="-1"
+         aria-labelledby="tokenModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-white">
+                    <h5 class="modal-title" id="tokenModalLabel">Kiosk Access Link</h5>
+                    <button type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        To set up a kiosk for <strong><span class="tokenName">BLANK</span></strong>, please use the unique access link provided below.
+                        Copy this link and enter it into the web browser of the kiosk device to directly access the Guest Check-In page without the need for authentication.
+                    </p>
+                    <div class="input-group">
+                        <input type="text"
+                               id="tokenLink"
+                               class="form-control"
+                               value="{{ request.scheme }}://{{ request.get_host }}{% url 'vms:kiosk_checkin' %}?token="
+                               readonly>
+                        <button class="btn btn-secondary" type="button" id="copyTokenLink">Copy</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        // Add listener for the copy button inside the modal
+        document
+            .getElementById("copyTokenLink")
+            .addEventListener("click", function () {
+            const tokenLink = document.getElementById("tokenLink");
+            tokenLink.select();
+            navigator.clipboard
+                .writeText(tokenLink.value)
+                .then(() => {
+                // Optionally, display a success message to the user
+                console.log("Token link copied to clipboard.");
+                })
+                .catch((err) => {
+                console.error("Error copying text: ", err);
+                });
+            });
+
+        //test
+
+        // Function to fetch token details and update the modal content
+        function retrieveAndShowKioskToken(tokenId) {
+            // Adjust the URL template to match your Django URL name and parameters
+            const url = `/vms/api/kiosk/${tokenId}/token`;
+
+            fetch(url)
+            .then((response) => {
+                if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                // Assuming 'data' contains 'name' and 'token' fields
+                document.querySelector(".tokenName").textContent = data.name;
+
+                // Construct the link with the token
+                const baseUrl = `${window.location.protocol}//${
+                window.location.host
+                }/vms/kiosk/checkin/?token=${encodeURIComponent(data.token)}`;
+                document.getElementById("tokenLink").value = baseUrl;
+
+                // Show the modal using Bootstrap's jQuery method
+                $("#tokenModal").modal("show");
+            })
+            .catch((error) => console.error("Fetch error:", error));
+        }
+
+        // Attach event listeners to each "Get Link" button
+        document.querySelectorAll(".view-token-btn").forEach((button) => {
+            button.addEventListener("click", function () {
+            const tokenId = this.getAttribute("data-token-id"); // Ensure your buttons have this data attribute
+            retrieveAndShowKioskToken(tokenId);
+            });
+        });
+        });
+    </script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedTab = urlParams.get('tab');
+        
+        if (selectedTab) {
+            const triggerEl = document.querySelector(`button[data-bs-target="#nav-${selectedTab}"]`);
+            if (triggerEl) {
+            new bootstrap.Tab(triggerEl).show();
+            }
+        }
+        
+        // Update URL query when a tab is manually selected
+        const tabTriggers = document.querySelectorAll('button[data-bs-toggle="tab"]');
+        tabTriggers.forEach(function(trigger) {
+            trigger.addEventListener('shown.bs.tab', function(event) {
+            const selectedTabId = event.target.getAttribute('data-bs-target').substring(5);
+            urlParams.set('tab', selectedTabId);
+            history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
+            });
+        });
+    </script>
+{% endblock %}

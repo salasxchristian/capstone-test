@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    {% include 'partials/messages_alert.html'   %}
+    <div class="d-flex justify-content-between">
+        <div>
+            <h1 class="mb-0">Resource Link Categories</h1>
+            <p class="text-muted">A Resource Link Category is used to organize links and resources.</p>
+        </div>
+        <div>
+            <a href="{% url 'resources:create_link_category' %}" class="btn btn-primary me-2"><i class="bi bi-plus-lg"></i> Add Category</a>
+            <a href="{% url 'resources:links' %}" class="btn btn-primary"><i class="bi bi-list"></i> View Links</a>
+        </div>
+    </div>
+    {% if object_list %}
+        <table class="table table-striped table-hover" id="linkCategoriesTable">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Date Added</th>
+                    <th>Last Modified</th>
+                    <th>Last Modified By</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in object_list %}
+                    <tr>
+                        <td>{{ category.name }}</td>
+                        <td>{{ category.date_added }}</td>
+                        <td>{{ category.last_modified }}</td>
+                        <td>{{ category.last_modified_by.get_full_name }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots-vertical"></i> Actions</button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'resources:category_edit' category.id %}">Edit</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'resources:category_delete' category.id %}">Delete</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No Resource Link Categories found.</p>
+    {% endif %}
+</div>
+{% endblock %}

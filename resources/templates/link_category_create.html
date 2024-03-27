@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Form validation. An example is when a Link Category already exists an alert in the form pops up letting the user know that 
+    that one with the same name already exists and asks the user to try again with a uniquee name. -->
+    {% include 'partials/form_error.html' %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="mb-0">Create Link Category</h1> 
+            <p class="text-muted">A Resource Link Category is used to organize links and resources.</p>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="name" class="form-label"><strong>Name<span class="text-danger">*</span></strong></label>
+                    {{ form.name}}
+                    <div id="nameHelp" class="form-text">Enter a unique Link Category name</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a href="{% url 'resources:categories' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>    
+{% endblock %}

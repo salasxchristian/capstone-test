@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h2>{{ link.title }}</h2>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><strong>URL:</strong> <a href="{{ link.url }}">{{ link.url }}</a></h5>
+                <p class="card-text"><strong>Description:</strong> {{ link.description }}</p>
+                <p class="card-text"><strong>Date Added:</strong> {{ link.date_added }}</p>
+                <p class="card-text"><strong>Last Modified:</strong> {{ link.last_modified }}</p>
+                <p class="card-text"><strong>Created By:</strong> {{ link.created_by }}</p>
+                <p class="card-text"><strong>Category:</strong> {{ link.category.name }}</p>
+                <p class="card-text"><strong>Is Active:</strong> {{ link.is_active }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

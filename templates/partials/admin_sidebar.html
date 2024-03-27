@@ -1,0 +1,10 @@
+<!-- admin_sidebar.html -->
+<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark admin-sidebar" style="width: 280px; height: calc(100vh - 56px);">
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li>
+            <a href="{% url 'portal:admin_settings' %}" class="nav-link text-white{% if request.path == '/admin/settings/' %} active{% endif %}" id="admin_settings_link">
+                Application Settings
+            </a>
+        </li>
+    </ul>
+</div>
