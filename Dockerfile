@@ -2,9 +2,6 @@ FROM python:3.11-alpine
 
 WORKDIR /code
 
-# Copy the .env file from the host to the container's working directory
-COPY /etc/secrets/.env .env
-
 ENV PYTHONUNBUFFERED 1
 
 COPY requirements.txt requirements.txt
