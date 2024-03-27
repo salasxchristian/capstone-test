@@ -1,16 +1,18 @@
+# Use an official Python runtime as a parent image
 FROM python:3.11-alpine
 
-WORKDIR /code
-
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+# Set work directory
+WORKDIR /app
 
-COPY . .
+# Install dependencies
+COPY requirements.txt /app/
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-RUN python manage.py collectstatic --no-input
-
-EXPOSE 8000
+# Copy project
+COPY . /app/
 
 CMD ["gunicorn", "acmeportal.wsgi:application", "--bind", "0.0.0.0:8000"]

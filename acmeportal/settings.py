@@ -32,7 +32,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
 
-ALLOWED_HOSTS = ['*.onrender.com', 'localhost']
+ALLOWED_HOSTS = ['.onrender.com']
 
 
 LOGOUT_REDIRECT_URL = "/accounts/login"
@@ -114,7 +114,7 @@ else:
     DATABASES = {
     'default': dj_database_url.config(
         # Replace this value with your local database's connection string.
-        default=env('DATABASE_URL'),
+        default='postgres://acmedb_user:9uup7ksxLkoh9JSVgd6JC3iUMw57A1Fq@dpg-co237ject0pc73deauk0-a/acmeportal',
         conn_max_age=600
     )
 }
@@ -162,8 +162,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 if not DEBUG:
     # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
