@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app/
 
 # Collect static files
-RUN python manage.py collectstatic --noinput
+RUN DJANGO_SECRET_KEY=secret python manage.py collectstatic --no-input
 
 # Run Gunicorn
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "acmeportal.wsgi:application"]
