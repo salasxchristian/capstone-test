@@ -165,6 +165,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 if not DEBUG:
+    # Set STATICFILES_DIRS setting to specify the location of the static files in the project
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, 'static'),
     ]
