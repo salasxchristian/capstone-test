@@ -2,8 +2,8 @@ FROM python:3.11-alpine
 
 WORKDIR /code
 
-# Set the path to the .env file
-ENV ENV_PATH /etc/secrets/.env
+# Copy the .env file from the host to the container's working directory
+COPY /etc/secrets/.env .env
 
 ENV PYTHONUNBUFFERED 1
 

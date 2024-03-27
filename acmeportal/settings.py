@@ -26,12 +26,7 @@ env = environ.Env()
 
 DEBUG = env.bool('DEBUG', default=False)
 
-if DEBUG:
-    # We are in development, read .env from BASE_DIR
-    environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
-else:
-    # We are in production, read .env from /etc/secrets/
-    environ.Env.read_env('/etc/secrets/.env')
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
