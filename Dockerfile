@@ -15,4 +15,6 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy project
 COPY . /app/
 
+RUN python manage.py collectstatic --noinput
+
 CMD ["gunicorn", "acmeportal.wsgi:application", "--bind", "0.0.0.0:8000"]
